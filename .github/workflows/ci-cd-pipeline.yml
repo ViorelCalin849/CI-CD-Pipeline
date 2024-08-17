@@ -15,19 +15,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Add steps specific to your build tool or language
-      - name: Set up Build Environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
         run: |
-          # Example for setting up a build environment
-          # This could include installing dependencies or tools required for your build
-          echo "Setting up build environment..."
+          npm install
 
       - name: Build project
         run: |
-          # Add your build commands here
-          echo "Building the project..."
-          # For example, if using a Makefile:
-          # make build
+          echo "No build step for this project"
 
   test:
     runs-on: ubuntu-latest
@@ -36,24 +35,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Test Environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
         run: |
-          # Example for setting up a test environment
-          echo "Setting up test environment..."
+          npm install
 
       - name: Run tests
         run: |
-          # Add your test commands here
-          echo "Running tests..."
-          # For example, if using a testing framework:
-          # ./run-tests.sh
-
-      - name: Code coverage
-        run: |
-          # Add code coverage commands here if applicable
-          echo "Checking code coverage..."
-          # For example, if using a coverage tool:
-          # ./coverage-tool.sh
+          npm test
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,7 +57,4 @@ jobs:
 
       - name: Deploy to staging environment
         run: |
-          # Add your deployment commands here
-          echo "Deploying to staging environment..."
-          # For example, you might use SCP or a deployment tool
-          # scp -r build/ user@staging-server:/path/to/deploy
+          echo "No deployment step for this sample project"
