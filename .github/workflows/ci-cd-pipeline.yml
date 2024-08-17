@@ -24,13 +24,19 @@ jobs:
         run: |
           npm install
 
-      - name: Ensure mocha is executable
-        run: |
-          chmod +x node_modules/.bin/mocha
-
       - name: Build project
         run: |
           echo "No build step for this project"
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            # Specify the path to your build artifacts here
+            # e.g., dist/ or build/
+            # Assuming there are no artifacts in this case as per the current setup
+            # path: path/to/artifacts
 
   test:
     runs-on: ubuntu-latest
@@ -55,6 +61,11 @@ jobs:
       - name: Print PATH
         run: |
           echo $PATH
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
 
       - name: Run tests
         run: |
