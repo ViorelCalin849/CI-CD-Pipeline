@@ -24,6 +24,10 @@ jobs:
         run: |
           npm install
 
+      - name: Ensure mocha is executable
+        run: |
+          chmod +x node_modules/.bin/mocha
+
       - name: Build project
         run: |
           echo "No build step for this project"
@@ -43,6 +47,14 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+
+      - name: Ensure mocha is executable
+        run: |
+          chmod +x node_modules/.bin/mocha
+
+      - name: Print PATH
+        run: |
+          echo $PATH
 
       - name: Run tests
         run: |
