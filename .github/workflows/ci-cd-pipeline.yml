@@ -46,7 +46,7 @@ jobs:
 
       - name: Run tests
         run: |
-          npm test
+          npx mocha tests
 
   deploy:
     runs-on: ubuntu-latest
