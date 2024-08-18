@@ -38,6 +38,23 @@ jobs:
           name: build-artifact
           path: artifact/
 
+      - name: Notify Discord on build failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+            const message = {
+              content: `**Build failed** for \`${process.env.GITHUB_REPOSITORY}\` on branch \`${process.env.GITHUB_REF_NAME}\`. Check the details here: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}.`
+            };
+            fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(message)
+            });
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
   test:
     runs-on: ubuntu-latest
     needs: build
@@ -67,6 +84,23 @@ jobs:
         run: |
           npx mocha tests
 
+      - name: Notify Discord on test failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+            const message = {
+              content: `**Tests failed** for \`${process.env.GITHUB_REPOSITORY}\` on branch \`${process.env.GITHUB_REF_NAME}\`. Check the details here: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}.`
+            };
+            fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(message)
+            });
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
   deploy:
     runs-on: ubuntu-latest
     needs: test
@@ -82,3 +116,20 @@ jobs:
       - name: Deploy to staging environment
         run: |
           echo "No deployment step for this sample project"
+
+      - name: Notify Discord on deployment failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+            const message = {
+              content: `**Deployment failed** for \`${process.env.GITHUB_REPOSITORY}\` on branch \`${process.env.GITHUB_REF_NAME}\`. Check the details here: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}.`
+            };
+            fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(message)
+            });
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
