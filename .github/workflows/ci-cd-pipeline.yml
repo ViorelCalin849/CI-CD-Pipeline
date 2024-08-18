@@ -45,19 +45,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '21'
-
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
           name: build-artifact
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21'
+
       - name: Install dependencies
         run: |
           npm install
+
+      - name: Ensure mocha is executable
+        run: |
+          chmod +x node_modules/.bin/mocha
 
       - name: Run tests
         run: |
