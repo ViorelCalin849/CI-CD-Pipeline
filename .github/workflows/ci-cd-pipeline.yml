@@ -30,7 +30,7 @@ jobs:
 
       - name: Copy files to artifact directory
         run: |
-          rsync -R * artifact/
+          rsync -av --progress . artifact --exclude artifact
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
