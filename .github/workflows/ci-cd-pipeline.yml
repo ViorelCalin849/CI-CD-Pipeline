@@ -24,13 +24,19 @@ jobs:
         run: |
           npm install
 
-      - name: Ensure mocha is executable
+      - name: Create artifact directory
         run: |
-          chmod +x node_modules/.bin/mocha
+          mkdir -p artifact
 
-      - name: Build project
+      - name: Copy files to artifact directory
         run: |
-          echo "No build step for this project"
+          cp -R * artifact/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: artifact/
 
   test:
     runs-on: ubuntu-latest
@@ -44,17 +50,14 @@ jobs:
         with:
           node-version: '21'
 
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+
       - name: Install dependencies
         run: |
           npm install
-
-      - name: Ensure mocha is executable
-        run: |
-          chmod +x node_modules/.bin/mocha
-
-      - name: Print PATH
-        run: |
-          echo $PATH
 
       - name: Run tests
         run: |
@@ -66,6 +69,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
 
       - name: Deploy to staging environment
         run: |
